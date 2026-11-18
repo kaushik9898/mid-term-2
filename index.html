@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Club Registration</title>
+<style>
+  body { font-family: sans-serif; max-width: 400px; margin: 40px auto; padding: 20px; background: #f9fafb; }
+  .field { margin-bottom: 15px; }
+  label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+  input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+  .error input { border-color: #dc2626; background: #fef2f2; }
+  .error-msg { color: #dc2626; font-size: 12px; display: none; margin-top: 4px; }
+  .error .error-msg { display: block; }
+  button { width: 100%; padding: 10px; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+  button:hover { background: #4338ca; }
+</style>
+</head>
+<body>
+
+<h2>Club Signup</h2>
+<form id="clubForm" novalidate>
+  <div class="field" id="f-name">
+    <label>Full Name</label>
+    <input type="text" id="name" placeholder="Jane Doe">
+    <div class="error-msg">Please enter your name using only letters and spaces.</div>
+  </div>
+
+  <div class="field" id="f-email">
+    <label>University Email</label>
+    <input type="email" id="email" placeholder="student@university.edu">
+    <div class="error-msg">Must be a valid email ending in @university.edu.</div>
+  </div>
+
+  <div class="field" id="f-id">
+    <label>Student ID</label>
+    <input type="text" id="id" placeholder="12345678" maxlength="8">
+    <div class="error-msg">Student ID must be exactly 8 digits long.</div>
+  </div>
+
+  <button type="submit">Register</button>
+</form>
+
+<script>
+  const form = document.getElementById('clubForm');
+  
+  const rules = {
+    name: val => /^[A-Za-z\s]{2,50}$/.test(val.trim()),
+    email: val => val.endsWith('@university.edu') && val.includes('@'),
+    id: val => /^\d{8}$/.test(val.trim())
+  };
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let valid = true;
+
+    ['name', 'email', 'id'].forEach(fieldId => {
+      const input = document.getElementById(fieldId);
+      const parent = document.getElementById(`f-${fieldId}`);
+      
+      if (!rules[fieldId](input.value)) {
+        parent.classList.add('error');
+        valid = false;
+      } else {
+        parent.classList.remove('error');
+      }
+    });
+
+    if (valid) {
+      alert('🎉 Registration successful!');
+      form.reset();
+    }
+  });
+</script>
+
+</body>
+</html>
